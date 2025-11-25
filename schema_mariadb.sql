@@ -151,24 +151,32 @@ FOREIGN KEY (user_id) REFERENCES eume_user(user_id)
 -- ========================================
 -- 인덱스 생성
 -- ========================================
-
--- 사용자 테이블 인덱스
 CREATE INDEX idx_user_email ON eume_user(email);
 CREATE INDEX idx_user_status ON eume_user(user_status);
-CREATE INDEX idx_user_login_type ON eume_user(login_type);
+-- login_type 컬럼 없음 → 제거
+-- CREATE INDEX idx_user_login_type ON eume_user(login_type);
 
--- 채팅 관련 인덱스
-CREATE INDEX idx_user_chat_list_user ON pj_user_chat_list(user_id);
-CREATE INDEX idx_user_chat_content_room ON pj_user_chat_content(chat_room_id);
-CREATE INDEX idx_eum_chat_list_user ON pj_eum_chat_list(user_id);
-CREATE INDEX idx_eum_chat_list_date ON pj_eum_chat_list(chat_date);
-CREATE INDEX idx_eum_chat_content_chat ON pj_eum_chat_content(eum_chat_id);
 
--- 감정 분석 인덱스
-CREATE INDEX idx_user_emotion_user ON pj_user_emotion(user_id);
-CREATE INDEX idx_user_life_data_user ON pj_user_life_data(user_id);
-CREATE INDEX idx_user_life_data_date ON pj_user_life_data(status_date);
+-- 2. 일반 채팅 인덱스
+CREATE INDEX idx_user_chat_list_user ON user_chat_list(user_id);
+CREATE INDEX idx_user_chat_list_room ON user_chat_list(chat_room_id);
 
+CREATE INDEX idx_user_chat_content_room ON user_chat_content(chat_room_id);
+CREATE INDEX idx_user_chat_content_user ON user_chat_content(user_id);
+
+
+-- 3. 이음(EUME) 채팅 인덱스
+CREATE INDEX idx_eume_chat_list_user ON eume_chat_list(user_id);
+-- chat_date 컬럼 없음 → 제거
+-- CREATE INDEX idx_eume_chat_list_date ON eume_chat_list(chat_date);
+
+CREATE INDEX idx_eume_chat_content_chat ON eume_chat_content(eume_chat_id);
+CREATE INDEX idx_eume_chat_content_user ON eume_chat_content(user_id);
+
+
+-- 4. 감정 분석 인덱스
+CREATE INDEX idx_user_emotion_user ON user_emotion(user_id);
+CREATE INDEX idx_user_emotion_date ON user_emotion(analysis_date);
 
 -- ========================================
 -- 완료
